@@ -1,0 +1,19 @@
+.News {
+    padding: 10px 0 5px 0;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+/* 뉴스 링크 태그 */
+.News-link {
+    font-size: 11pt;
+    color: #000000;
+    text-decoration: none;
+    transition: .2s;
+}
+.News-link:visited { /* 방문 */
+    color: #939393;
+}
+.News-link:hover { /* visited, hover, active 의 순서 고려 */
+    color: #ff7171;
+    transition: .1s;
+}

@@ -1,0 +1,52 @@
+.Crawling { /* 그리드 컨테이너 */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    padding: 30px;
+}
+
+.Crawling-news { /* 그리드 아이템 & 자식 */
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 20px;
+    word-break: break-word; /* 텍스트 태그 벗어나지 않게 */
+    min-height: 300px;
+
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 뉴스 출처 */
+.Crawling-news-source {
+    margin: 0;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 16pt;
+    padding: 7px 0;
+    text-align: center;
+}
+/* naver */
+.Crawling-news-Naver {
+    background-color: #03c559;
+    color: white;
+}
+/* daum */
+.Crawling-news-daum {
+    background-color: #273551;
+    color: #fdfdfd;
+}
+/* google */
+.Crawling-news-google {
+    background-color: #4083f1;
+    color: #ffffff;
+}
+/* nate */
+.Crawling-news-nate {
+    background-color: #fd2c2e;
+    color: #ffffff;
+}
+
+/* 뉴스 정보 */
+.Crawling-news-content {
+    padding: 15px 10px;
+}
