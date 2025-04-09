@@ -15,7 +15,14 @@ const Crawling = () => {
     const [naver, setNaver] = useState();
     const [daum, setDaum] = useState()
     const [google, setGoogle] = useState()
-    const [nate, setNate] = useState()
+    const [nate, setNate] = useState();
+    const [testWord, setTestWord] = useState({
+        "경제": 25,
+        "기술": 13,
+        "정치": 10,
+        "인공지능": 12,
+        "사회": 2,
+    });
 
     const crawlingRequest = async () => {
         try {
@@ -39,12 +46,28 @@ const Crawling = () => {
         crawlingRequest();
     }, []);
 
+    // === 워드 클라우드 옵션 설정 === //
+    const options = {
+        rotation: 2, // 단어 회전 각도 ( 0: 수평만, 2: 수직/수평 등)
+        rotationAngle: [0, 90], // 회전 각도
+        fontSizes: [20, 60], // 폰트 사이즈 최소, 최대
+        padding: 2, // 단어 간격
+        fontFamily: "Noto Sans KR", // 한글 폰트 css 로 설정 가능
+        deterministic: true, // 동일 데이터에 대해 고정된 레이아웃
+    };
+
 
     if (loading) { // 로딩중인 경우
         return <div>로딩중...</div>;
     }
     return (
         <div className={"Crawling"}>
+            {/* 워드 클라우드 */}
+            <section className={"Crawling-wordCloud"}>
+                <ReactWordCloud words={testWord} options={options} />
+            </section>
+
+
             {/* 네이버 뉴스*/}
             <section className={"Crawling-news"}>
                 <h2 className={"Crawling-news-source Crawling-news-Naver"}>NAVER</h2>
@@ -84,6 +107,8 @@ const Crawling = () => {
                     }
                 </div>
             </section>
+
+
         </div>
     );
 }

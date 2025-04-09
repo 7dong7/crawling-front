@@ -50,3 +50,15 @@
 .Crawling-news-content {
     padding: 15px 10px;
 }
+
+
+/* 워드 클라우드 섹션 */
+.Crawling-wordCloud {
+    grid-column-start: 1;
+    grid-column-end: 3;
+
+    border-radius: 10px;
+    background-color: white;
+    min-height: 100px;
+    padding: 20px;
+}
