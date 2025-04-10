@@ -7,22 +7,18 @@ import {useEffect, useState} from "react";
 
 // component
 import News from "../components/News.jsx";
+import WordCloud from "react-d3-cloud";
 
 // 백엔드에서 한 번에 처리하되, 비동기(CompletableFuture)로 각 포털을 병렬 크롤링하는 방식.
 const Crawling = () => {
     const publicApi = usePublicApi(); // api 요청
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [naver, setNaver] = useState();
     const [daum, setDaum] = useState()
     const [google, setGoogle] = useState()
     const [nate, setNate] = useState();
-    const [testWord, setTestWord] = useState({
-        "경제": 25,
-        "기술": 13,
-        "정치": 10,
-        "인공지능": 12,
-        "사회": 2,
-    });
+    const [words, setWords] = useState();
+
 
     const crawlingRequest = async () => {
         try {
@@ -31,10 +27,13 @@ const Crawling = () => {
                 url: "/api/crawl",
             });
             console.log("response:", response);
-            setNaver(response.data.naver);
-            setDaum(response.data.daum);
-            setGoogle(response.data.google);
-            setNate(response.data.nate);
+            setNaver(response.data.news.naver);
+            setDaum(response.data.news.daum);
+            setGoogle(response.data.news.google);
+            setNate(response.data.news.nate);
+            const wordArray = Object.entries(response.data.wordFrequency).map(([text, value]) => ({text, value}));
+            console.log("wordArray:", wordArray);
+            setWords(wordArray);
         } catch (error) {
             console.log("error:", error);
         } finally {
@@ -46,27 +45,32 @@ const Crawling = () => {
         crawlingRequest();
     }, []);
 
-    // === 워드 클라우드 옵션 설정 === //
-    const options = {
-        rotation: 2, // 단어 회전 각도 ( 0: 수평만, 2: 수직/수평 등)
-        rotationAngle: [0, 90], // 회전 각도
-        fontSizes: [20, 60], // 폰트 사이즈 최소, 최대
-        padding: 2, // 단어 간격
-        fontFamily: "Noto Sans KR", // 한글 폰트 css 로 설정 가능
-        deterministic: true, // 동일 데이터에 대해 고정된 레이아웃
-    };
-
-
     if (loading) { // 로딩중인 경우
         return <div>로딩중...</div>;
     }
+
+    // Math.sqrt(word.value) * 3
+    const fontSize = (word) => Math.log(word.value) * 15; // 너무 큰 값 완화
+    const rotate = () => [-30, 0, 30][Math.floor(Math.random() * 3)]; // -30°, 0°, 30° 중 랜덤
+    const width = window.innerWidth * 0.5;
+
     return (
         <div className={"Crawling"}>
             {/* 워드 클라우드 */}
             <section className={"Crawling-wordCloud"}>
-                <ReactWordCloud words={testWord} options={options} />
+                { words &&
+                    <WordCloud
+                        data={words}
+                        fontSize={fontSize}
+                        rotate={rotate}
+                        padding={0.2}
+                        random={() => 0.5} // 랜덤성
+                        // spiral={"rectangular"}
+                        width={width}
+                        height={width/3}
+                    />
+                }
             </section>
-
 
             {/* 네이버 뉴스*/}
             <section className={"Crawling-news"}>
@@ -107,8 +111,6 @@ const Crawling = () => {
                     }
                 </div>
             </section>
-
-
         </div>
     );
 }
